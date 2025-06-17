@@ -2,27 +2,56 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { HistorySidebar } from '@/components/HistorySidebar';
+import { FavorResults } from '@/components/FavorResults';
 import { PB1Mode } from '@/components/modes/PB1Mode';
 import { PB2Mode } from '@/components/modes/PB2Mode';
 import { TB1Mode } from '@/components/modes/TB1Mode';
 import { TB2Mode } from '@/components/modes/TB2Mode';
 import { TBHybridMode } from '@/components/modes/TBHybridMode';
 import { HistoryItem } from '@/types/history';
+import { Favor } from '@/types/favor';
 
 const Index = () => {
   const [selectedMode, setSelectedMode] = useState<string>('');
   const [isHistoryOpen, setIsHistoryOpen] = useState(true);
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [selectedHistoryItem, setSelectedHistoryItem] = useState<HistoryItem | null>(null);
+  const [allResults, setAllResults] = useState<Array<{
+    id: string;
+    mode: string;
+    asker: string;
+    secondPerson?: string;
+    timestamp: string;
+    favors: Favor[];
+  }>>([]);
 
   const addToHistory = (item: HistoryItem) => {
     setHistoryItems(prev => [item, ...prev]);
+    
+    // Add results to the global results list
+    const resultEntry = {
+      id: item.id,
+      mode: item.mode,
+      asker: item.asker,
+      secondPerson: item.secondPerson,
+      timestamp: item.timestamp,
+      favors: item.results
+    };
+    
+    setAllResults(prev => [resultEntry, ...prev]);
   };
 
   const onHistoryItemClick = (item: HistoryItem) => {
     setSelectedHistoryItem(item);
     setSelectedMode(item.mode);
+  };
+
+  const updateResults = (resultId: string, updatedFavors: Favor[]) => {
+    setAllResults(prev => prev.map(result => 
+      result.id === resultId ? { ...result, favors: updatedFavors } : result
+    ));
   };
 
   const renderModeComponent = () => {
@@ -65,7 +94,7 @@ const Index = () => {
       
       <div className={`flex-1 transition-all duration-300 ${isHistoryOpen ? 'ml-64' : 'ml-0'}`}>
         <div className="p-6 max-w-4xl mx-auto">
-          <Card className="bg-white shadow-sm">
+          <Card className="bg-white shadow-sm mb-6">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold text-gray-900">
                 Recommend Favor to People
@@ -93,6 +122,46 @@ const Index = () => {
               {renderModeComponent()}
             </CardContent>
           </Card>
+
+          {allResults.length > 0 && (
+            <Card className="bg-white shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-xl font-semibold text-gray-900">
+                  All F2P Favor Results
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[600px] pr-4">
+                  <div className="space-y-6">
+                    {allResults.map((result) => (
+                      <div key={result.id} className="border-b border-gray-200 pb-6 last:border-b-0">
+                        <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <p className="text-sm text-gray-600">
+                              <span className="font-medium">Favor Type:</span> {result.mode}
+                            </p>
+                            <p className="text-xs text-gray-500">{result.timestamp}</p>
+                          </div>
+                          <p className="text-sm text-gray-600">
+                            <span className="font-medium">Asker:</span> {result.asker}
+                          </p>
+                          {result.secondPerson && (
+                            <p className="text-sm text-gray-600">
+                              <span className="font-medium">Second Person:</span> {result.secondPerson}
+                            </p>
+                          )}
+                        </div>
+                        <FavorResults 
+                          results={result.favors} 
+                          setResults={(updatedFavors) => updateResults(result.id, updatedFavors)} 
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </div>
