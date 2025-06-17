@@ -18,23 +18,32 @@ export const PB2Mode: React.FC = () => {
     setIsLoading(true);
     
     setTimeout(() => {
-      const mockResults: Favor[] = [
+      const newFavors: Favor[] = [
         {
-          id: '1',
+          id: `pb2-${Date.now()}-1`,
           title: 'Facilitate a partnership discussion between two fintech companies for payment processing integration.',
           justification: 'Your connections to both parties and understanding of fintech partnerships makes you uniquely positioned to facilitate this collaboration. Both parties would benefit from your neutral perspective.',
           isExpanded: false,
           isMailHighlighted: false
         },
         {
-          id: '2',
+          id: `pb2-${Date.now()}-2`,
           title: 'Coordinate a joint research proposal between academic institutions in machine learning.',
           justification: 'Given your academic network and research background, you can help align the research interests of both parties and facilitate a successful collaboration.',
           isExpanded: false,
           isMailHighlighted: false
+        },
+        {
+          id: `pb2-${Date.now()}-3`,
+          title: 'Organize a strategic alliance meeting between two complementary technology startups.',
+          justification: 'Your experience in business development and understanding of both companies\' market positions makes you ideal for facilitating this potential partnership.',
+          isExpanded: false,
+          isMailHighlighted: false
         }
       ];
-      setResults(mockResults);
+      
+      // Add new favors to the top of existing results
+      setResults(prevResults => [...newFavors, ...prevResults]);
       setIsLoading(false);
     }, 1500);
   };

@@ -18,23 +18,32 @@ export const TBHybridMode: React.FC = () => {
     setIsLoading(true);
     
     setTimeout(() => {
-      const mockResults: Favor[] = [
+      const newFavors: Favor[] = [
         {
-          id: '1',
+          id: `tbhybrid-${Date.now()}-1`,
           title: 'Facilitate a hybrid collaboration combining mentorship and partnership opportunities.',
           justification: 'Your unique position allows you to create value for both parties through a combination of knowledge transfer and strategic partnership facilitation.',
           isExpanded: false,
           isMailHighlighted: false
         },
         {
-          id: '2',
+          id: `tbhybrid-${Date.now()}-2`,
           title: 'Create a mixed-format engagement combining advisory services with networking opportunities.',
           justification: 'Your diverse network and advisory experience enable you to provide multifaceted value through both direct guidance and strategic connections.',
           isExpanded: false,
           isMailHighlighted: false
+        },
+        {
+          id: `tbhybrid-${Date.now()}-3`,
+          title: 'Design a comprehensive program mixing skill development with strategic business guidance.',
+          justification: 'Your holistic approach to professional development and business strategy makes you ideal for creating comprehensive growth programs that address multiple needs.',
+          isExpanded: false,
+          isMailHighlighted: false
         }
       ];
-      setResults(mockResults);
+      
+      // Add new favors to the top of existing results
+      setResults(prevResults => [...newFavors, ...prevResults]);
       setIsLoading(false);
     }, 1500);
   };

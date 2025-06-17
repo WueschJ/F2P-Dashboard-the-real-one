@@ -18,23 +18,32 @@ export const TB2Mode: React.FC = () => {
     setIsLoading(true);
     
     setTimeout(() => {
-      const mockResults: Favor[] = [
+      const newFavors: Favor[] = [
         {
-          id: '1',
+          id: `tb2-${Date.now()}-1`,
           title: 'Organize a knowledge sharing session between two technical teams on best practices.',
           justification: 'Your ability to facilitate cross-team collaboration and technical knowledge transfer makes you ideal for organizing this type of learning exchange.',
           isExpanded: false,
           isMailHighlighted: false
         },
         {
-          id: '2',
+          id: `tb2-${Date.now()}-2`,
           title: 'Coordinate a joint technical workshop on emerging technologies and industry trends.',
           justification: 'Your understanding of both parties\' technical interests and your event coordination skills position you well to create valuable learning opportunities.',
           isExpanded: false,
           isMailHighlighted: false
+        },
+        {
+          id: `tb2-${Date.now()}-3`,
+          title: 'Facilitate a collaborative code review session between different development teams.',
+          justification: 'Your technical expertise and diplomatic skills make you perfect for fostering productive cross-team code collaboration and learning.',
+          isExpanded: false,
+          isMailHighlighted: false
         }
       ];
-      setResults(mockResults);
+      
+      // Add new favors to the top of existing results
+      setResults(prevResults => [...newFavors, ...prevResults]);
       setIsLoading(false);
     }, 1500);
   };

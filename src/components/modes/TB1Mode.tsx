@@ -17,23 +17,32 @@ export const TB1Mode: React.FC = () => {
     setIsLoading(true);
     
     setTimeout(() => {
-      const mockResults: Favor[] = [
+      const newFavors: Favor[] = [
         {
-          id: '1',
+          id: `tb1-${Date.now()}-1`,
           title: 'Provide mentorship for junior developers transitioning to senior roles in tech companies.',
           justification: 'Your technical leadership experience and successful career progression makes you an excellent mentor for developers looking to advance their careers.',
           isExpanded: false,
           isMailHighlighted: false
         },
         {
-          id: '2',
+          id: `tb1-${Date.now()}-2`,
           title: 'Share insights on building resilient engineering teams in high-growth environments.',
           justification: 'Your experience scaling engineering teams and implementing best practices positions you well to help others facing similar organizational challenges.',
           isExpanded: false,
           isMailHighlighted: false
+        },
+        {
+          id: `tb1-${Date.now()}-3`,
+          title: 'Conduct technical workshops on modern software architecture patterns.',
+          justification: 'Your deep technical expertise and teaching ability make you ideal for sharing knowledge about cutting-edge software design patterns with other professionals.',
+          isExpanded: false,
+          isMailHighlighted: false
         }
       ];
-      setResults(mockResults);
+      
+      // Add new favors to the top of existing results
+      setResults(prevResults => [...newFavors, ...prevResults]);
       setIsLoading(false);
     }, 1500);
   };

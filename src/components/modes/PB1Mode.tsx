@@ -18,30 +18,32 @@ export const PB1Mode: React.FC = () => {
     
     // Simulate API call
     setTimeout(() => {
-      const mockResults: Favor[] = [
+      const newFavors: Favor[] = [
         {
-          id: '1',
+          id: `pb1-${Date.now()}-1`,
           title: 'Looking for introductions to senior executives at leading AI research labs in Germany for potential collaborations or investments.',
           justification: 'Based on your network analysis, you have strong connections in the AI research community and have previously facilitated similar introductions. This favor aligns with your expertise in technology partnerships.',
           isExpanded: false,
           isMailHighlighted: false
         },
         {
-          id: '2',
+          id: `pb1-${Date.now()}-2`,
           title: 'Seeking recommendations for experienced software architects familiar with distributed systems.',
           justification: 'Your background in enterprise software development and your network of technical professionals makes you an ideal person to provide quality recommendations in this area.',
           isExpanded: false,
           isMailHighlighted: false
         },
         {
-          id: '3',
+          id: `pb1-${Date.now()}-3`,
           title: 'Need advice on scaling team culture in a rapidly growing startup environment.',
           justification: 'Given your leadership experience and successful track record with organizational growth, your insights would be valuable for someone facing similar challenges.',
           isExpanded: false,
           isMailHighlighted: false
         }
       ];
-      setResults(mockResults);
+      
+      // Add new favors to the top of existing results
+      setResults(prevResults => [...newFavors, ...prevResults]);
       setIsLoading(false);
     }, 1500);
   };
