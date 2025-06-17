@@ -1,16 +1,34 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FavorResults } from '@/components/FavorResults';
 import { Favor } from '@/types/favor';
+import { HistoryItem } from '@/types/history';
 
-export const PB2Mode: React.FC = () => {
+interface PB2ModeProps {
+  onAddToHistory: (item: HistoryItem) => void;
+  selectedHistoryItem: HistoryItem | null;
+}
+
+export const PB2Mode: React.FC<PB2ModeProps> = ({ onAddToHistory, selectedHistoryItem }) => {
   const [askerName, setAskerName] = useState('');
   const [secondPerson, setSecondPerson] = useState('');
   const [results, setResults] = useState<Favor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (selectedHistoryItem && selectedHistoryItem.mode === 'PB2') {
+      setAskerName(selectedHistoryItem.asker);
+      setSecondPerson(selectedHistoryItem.secondPerson || '');
+      setResults(selectedHistoryItem.results);
+    } else {
+      setAskerName('');
+      setSecondPerson('');
+      setResults([]);
+    }
+  }, [selectedHistoryItem]);
 
   const handleRunRecommendation = async () => {
     if (!askerName.trim() || !secondPerson.trim()) return;
@@ -42,8 +60,19 @@ export const PB2Mode: React.FC = () => {
         }
       ];
       
-      // Add new favors to the top of existing results
-      setResults(prevResults => [...newFavors, ...prevResults]);
+      setResults(newFavors);
+      
+      // Add to history
+      const historyItem: HistoryItem = {
+        id: `pb2-${Date.now()}`,
+        mode: 'PB2',
+        asker: askerName,
+        secondPerson: secondPerson,
+        timestamp: new Date().toLocaleString(),
+        results: newFavors
+      };
+      
+      onAddToHistory(historyItem);
       setIsLoading(false);
     }, 1500);
   };
@@ -61,6 +90,7 @@ export const PB2Mode: React.FC = () => {
             value={askerName}
             onChange={(e) => setAskerName(e.target.value)}
             className="w-full"
+            disabled={!!selectedHistoryItem}
           />
         </div>
 
@@ -74,16 +104,19 @@ export const PB2Mode: React.FC = () => {
             value={secondPerson}
             onChange={(e) => setSecondPerson(e.target.value)}
             className="w-full"
+            disabled={!!selectedHistoryItem}
           />
         </div>
 
-        <Button 
-          onClick={handleRunRecommendation}
-          disabled={!askerName.trim() || !secondPerson.trim() || isLoading}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
-        >
-          {isLoading ? 'Processing...' : 'Run F2P Recommendation'}
-        </Button>
+        {!selectedHistoryItem && (
+          <Button 
+            onClick={handleRunRecommendation}
+            disabled={!askerName.trim() || !secondPerson.trim() || isLoading}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
+          >
+            {isLoading ? 'Processing...' : 'Run F2P Recommendation'}
+          </Button>
+        )}
       </div>
 
       {results.length > 0 && (
