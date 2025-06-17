@@ -3,20 +3,23 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { X, Menu, Clock } from 'lucide-react';
+import { HistoryItem } from '@/types/history';
 
 interface HistorySidebarProps {
   isOpen: boolean;
   onToggle: () => void;
+  historyItems: HistoryItem[];
+  onHistoryItemClick: (item: HistoryItem) => void;
+  selectedHistoryItem: HistoryItem | null;
 }
 
-export const HistorySidebar: React.FC<HistorySidebarProps> = ({ isOpen, onToggle }) => {
-  const historyItems = [
-    { id: 1, mode: 'PB1', asker: 'marie tai', timestamp: '2 hours ago' },
-    { id: 2, mode: 'PB2', asker: 'john doe', timestamp: '1 day ago' },
-    { id: 3, mode: 'TB1', asker: 'sarah wilson', timestamp: '2 days ago' },
-    { id: 4, mode: 'PB1', asker: 'mike johnson', timestamp: '3 days ago' },
-  ];
-
+export const HistorySidebar: React.FC<HistorySidebarProps> = ({ 
+  isOpen, 
+  onToggle, 
+  historyItems, 
+  onHistoryItemClick,
+  selectedHistoryItem 
+}) => {
   return (
     <>
       {/* Mobile overlay */}
@@ -43,18 +46,33 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({ isOpen, onToggle
         
         <ScrollArea className="h-[calc(100vh-80px)]">
           <div className="p-2">
-            {historyItems.map((item) => (
-              <div 
-                key={item.id}
-                className="p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors mb-2"
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-blue-600">{item.mode}</span>
-                  <span className="text-xs text-gray-500">{item.timestamp}</span>
-                </div>
-                <p className="text-sm text-gray-700 truncate">Asker: {item.asker}</p>
+            {historyItems.length === 0 ? (
+              <div className="p-3 text-sm text-gray-500 text-center">
+                No history yet
               </div>
-            ))}
+            ) : (
+              historyItems.map((item) => (
+                <div 
+                  key={item.id}
+                  className={`p-3 rounded-lg cursor-pointer transition-colors mb-2 ${
+                    selectedHistoryItem?.id === item.id 
+                      ? 'bg-blue-50 border border-blue-200' 
+                      : 'hover:bg-gray-50'
+                  }`}
+                  onClick={() => onHistoryItemClick(item)}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-blue-600">{item.mode}</span>
+                    <span className="text-xs text-gray-500">{item.timestamp}</span>
+                  </div>
+                  <p className="text-sm text-gray-700 truncate">Asker: {item.asker}</p>
+                  {item.secondPerson && (
+                    <p className="text-xs text-gray-500 truncate">+ {item.secondPerson}</p>
+                  )}
+                  <p className="text-xs text-gray-500 mt-1">{item.results.length} favors</p>
+                </div>
+              ))
+            )}
           </div>
         </ScrollArea>
       </div>

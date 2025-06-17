@@ -1,22 +1,37 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FavorResults } from '@/components/FavorResults';
 import { Favor } from '@/types/favor';
+import { HistoryItem } from '@/types/history';
 
-export const PB1Mode: React.FC = () => {
+interface PB1ModeProps {
+  onAddToHistory: (item: HistoryItem) => void;
+  selectedHistoryItem: HistoryItem | null;
+}
+
+export const PB1Mode: React.FC<PB1ModeProps> = ({ onAddToHistory, selectedHistoryItem }) => {
   const [askerName, setAskerName] = useState('');
   const [results, setResults] = useState<Favor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (selectedHistoryItem && selectedHistoryItem.mode === 'PB1') {
+      setAskerName(selectedHistoryItem.asker);
+      setResults(selectedHistoryItem.results);
+    } else {
+      setAskerName('');
+      setResults([]);
+    }
+  }, [selectedHistoryItem]);
 
   const handleRunRecommendation = async () => {
     if (!askerName.trim()) return;
     
     setIsLoading(true);
     
-    // Simulate API call
     setTimeout(() => {
       const newFavors: Favor[] = [
         {
@@ -42,8 +57,18 @@ export const PB1Mode: React.FC = () => {
         }
       ];
       
-      // Add new favors to the top of existing results
-      setResults(prevResults => [...newFavors, ...prevResults]);
+      setResults(newFavors);
+      
+      // Add to history
+      const historyItem: HistoryItem = {
+        id: `pb1-${Date.now()}`,
+        mode: 'PB1',
+        asker: askerName,
+        timestamp: new Date().toLocaleString(),
+        results: newFavors
+      };
+      
+      onAddToHistory(historyItem);
       setIsLoading(false);
     }, 1500);
   };
@@ -61,16 +86,19 @@ export const PB1Mode: React.FC = () => {
             value={askerName}
             onChange={(e) => setAskerName(e.target.value)}
             className="w-full"
+            disabled={!!selectedHistoryItem}
           />
         </div>
 
-        <Button 
-          onClick={handleRunRecommendation}
-          disabled={!askerName.trim() || isLoading}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
-        >
-          {isLoading ? 'Processing...' : 'Run F2P Recommendation'}
-        </Button>
+        {!selectedHistoryItem && (
+          <Button 
+            onClick={handleRunRecommendation}
+            disabled={!askerName.trim() || isLoading}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
+          >
+            {isLoading ? 'Processing...' : 'Run F2P Recommendation'}
+          </Button>
+        )}
       </div>
 
       {results.length > 0 && (
