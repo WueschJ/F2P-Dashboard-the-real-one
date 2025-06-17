@@ -12,6 +12,7 @@ import { TB2Mode } from '@/components/modes/TB2Mode';
 import { TBHybridMode } from '@/components/modes/TBHybridMode';
 import { HistoryItem } from '@/types/history';
 import { Favor } from '@/types/favor';
+import { User } from 'lucide-react';
 
 const Index = () => {
   const [selectedMode, setSelectedMode] = useState<string>('');
@@ -70,8 +71,13 @@ const Index = () => {
         return <TBHybridMode key={key} onAddToHistory={addToHistory} selectedHistoryItem={selectedHistoryItem} />;
       default:
         return (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">Please select an approach to get started</p>
+          <div className="text-center py-16">
+            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <p className="text-gray-500">No recommendations yet. Create your first P2F request above!</p>
           </div>
         );
     }
@@ -93,21 +99,33 @@ const Index = () => {
       />
       
       <div className={`flex-1 transition-all duration-300 ${isHistoryOpen ? 'ml-64' : 'ml-0'}`}>
-        <div className="p-6 max-w-4xl mx-auto">
-          <Card className="bg-white shadow-sm mb-6">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold text-gray-900">
-                Recommend Favor to People
-              </CardTitle>
+        <div className="p-8 max-w-5xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-blue-600 mb-2">P2F Operations</h1>
+            <p className="text-gray-500 text-lg">Find people that can facilitate favors</p>
+          </div>
+
+          {/* Main Card */}
+          <Card className="bg-white shadow-sm border-0 mb-8">
+            <CardHeader className="pb-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <User className="w-5 h-5 text-blue-600" />
+                </div>
+                <CardTitle className="text-xl font-semibold text-gray-900">
+                  Recommend People to Favor
+                </CardTitle>
+              </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <label htmlFor="approach" className="text-sm font-medium text-gray-700">
-                  Approach
+              <div className="space-y-3">
+                <label htmlFor="approach" className="text-sm font-medium text-gray-700 block">
+                  Select Person
                 </label>
                 <Select value={selectedMode} onValueChange={handleModeChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select an approach" />
+                  <SelectTrigger className="w-full h-12 border-gray-200">
+                    <SelectValue placeholder="Choose a person..." />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="PB1">PB1</SelectItem>
@@ -124,7 +142,7 @@ const Index = () => {
           </Card>
 
           {allResults.length > 0 && (
-            <Card className="bg-white shadow-sm">
+            <Card className="bg-white shadow-sm border-0">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold text-gray-900">
                   All F2P Favor Results
