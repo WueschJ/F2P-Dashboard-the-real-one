@@ -102,8 +102,8 @@ const Index = () => {
         <div className="p-8 max-w-5xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-blue-600 mb-2">P2F Operations</h1>
-            <p className="text-gray-500 text-lg">Find people that can facilitate favors</p>
+            <h1 className="text-4xl font-bold text-blue-600 mb-2">F2P Operations</h1>
+            <p className="text-gray-500 text-lg">Find relevant Favors</p>
           </div>
 
           {/* Main Card */}
