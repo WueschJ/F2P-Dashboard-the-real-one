@@ -160,6 +160,30 @@ export const TBHybridMode: React.FC<TBHybridModeProps> = ({ onAddToHistory, sele
             <p className="text-sm text-gray-600">
               <span className="font-medium">Second Person:</span> {secondPersonName}
             </p>
+            
+            <div className="mt-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs font-medium text-gray-700 mb-1">{askerName} → {secondPersonName}:</p>
+                <div className="space-y-1">
+                  {leftColumnFavors.map((favor, index) => (
+                    <p key={favor.id} className="text-xs text-gray-600">
+                      {index + 1}. {favor.title.substring(0, 60)}...
+                    </p>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <p className="text-xs font-medium text-gray-700 mb-1">{secondPersonName} → {askerName}:</p>
+                <div className="space-y-1">
+                  {rightColumnFavors.map((favor, index) => (
+                    <p key={favor.id} className="text-xs text-gray-600">
+                      {index + 1}. {favor.title.substring(0, 60)}...
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
