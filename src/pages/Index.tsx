@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -114,7 +113,7 @@ const Index = () => {
                   <User className="w-5 h-5 text-blue-600" />
                 </div>
                 <CardTitle className="text-xl font-semibold text-gray-900">
-                  Recommend People to Favor
+                  Recommend Favor to People
                 </CardTitle>
               </div>
             </CardHeader>
