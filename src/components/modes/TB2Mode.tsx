@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,8 +19,7 @@ export const TB2Mode: React.FC<TB2ModeProps> = ({ onAddToHistory, selectedHistor
 
   // Random names for display
   const randomNames = [
-    "Stephan Peters", "Matthew Wild", "Maria Soprano",
-    "Jennifer Davis", "Michael Chen", "Sarah Johnson"
+    "Stephan Peters", "Matthew Wild", "Maria Soprano"
   ];
 
   useEffect(() => {
@@ -157,32 +155,23 @@ export const TB2Mode: React.FC<TB2ModeProps> = ({ onAddToHistory, selectedHistor
             F2P Favor Approval Dashboard
           </h3>
           <div className="bg-gray-50 p-4 rounded-lg mb-4">
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">Favor Type:</span> TB2
-            </p>
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">Asker:</span> {askerName}
-            </p>
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">Second Person:</span> {secondPerson}
-            </p>
-            
-            <div className="mt-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
-                <p className="text-xs font-medium text-gray-700 mb-1">{askerName} → {secondPerson}:</p>
-                <div className="space-y-1">
-                  {randomNames.slice(0, 3).map((name, index) => (
-                    <p key={index} className="text-xs text-gray-600">
-                      {index + 1}. {name}
-                    </p>
-                  ))}
-                </div>
+                <p className="text-sm text-gray-600">
+                  <span className="font-medium">Favor Type:</span> TB2
+                </p>
+                <p className="text-sm text-gray-600">
+                  <span className="font-medium">Asker:</span> {askerName}
+                </p>
+                <p className="text-sm text-gray-600">
+                  <span className="font-medium">Second Person:</span> {secondPerson}
+                </p>
               </div>
               
               <div>
-                <p className="text-xs font-medium text-gray-700 mb-1">{secondPerson} → {askerName}:</p>
+                <p className="text-xs font-medium text-gray-700 mb-1">K-Weakest Neighbors:</p>
                 <div className="space-y-1">
-                  {randomNames.slice(3, 6).map((name, index) => (
+                  {randomNames.map((name, index) => (
                     <p key={index} className="text-xs text-gray-600">
                       {index + 1}. {name}
                     </p>
