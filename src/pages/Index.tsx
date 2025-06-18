@@ -121,11 +121,11 @@ const Index = () => {
             <CardContent className="space-y-6">
               <div className="space-y-3">
                 <label htmlFor="approach" className="text-sm font-medium text-gray-700 block">
-                  Select Person
+                  Mode
                 </label>
                 <Select value={selectedMode} onValueChange={handleModeChange}>
                   <SelectTrigger className="w-full h-12 border-gray-200">
-                    <SelectValue placeholder="Choose a person..." />
+                    <SelectValue placeholder="Choose a mode..." />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="PB1">PB1</SelectItem>
