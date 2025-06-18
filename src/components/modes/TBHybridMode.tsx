@@ -14,21 +14,24 @@ interface TBHybridModeProps {
 
 export const TBHybridMode: React.FC<TBHybridModeProps> = ({ onAddToHistory, selectedHistoryItem }) => {
   const [askerName, setAskerName] = useState('');
+  const [secondPersonName, setSecondPersonName] = useState('');
   const [results, setResults] = useState<Favor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (selectedHistoryItem && selectedHistoryItem.mode === 'TB_HYBRID') {
       setAskerName(selectedHistoryItem.asker);
+      setSecondPersonName(selectedHistoryItem.secondPerson || '');
       setResults(selectedHistoryItem.results);
     } else {
       setAskerName('');
+      setSecondPersonName('');
       setResults([]);
     }
   }, [selectedHistoryItem]);
 
   const handleRunRecommendation = async () => {
-    if (!askerName.trim()) return;
+    if (!askerName.trim() || !secondPersonName.trim()) return;
     
     setIsLoading(true);
     
@@ -87,6 +90,7 @@ export const TBHybridMode: React.FC<TBHybridModeProps> = ({ onAddToHistory, sele
         id: `tbhybrid-${Date.now()}`,
         mode: 'TB_HYBRID',
         asker: askerName,
+        secondPerson: secondPersonName,
         timestamp: new Date().toLocaleString(),
         results: newFavors
       };
@@ -116,10 +120,24 @@ export const TBHybridMode: React.FC<TBHybridModeProps> = ({ onAddToHistory, sele
           />
         </div>
 
+        <div className="space-y-2">
+          <Label htmlFor="secondPerson" className="text-sm font-medium text-gray-700">
+            Second Person
+          </Label>
+          <Input
+            id="secondPerson"
+            placeholder="Enter second person's name"
+            value={secondPersonName}
+            onChange={(e) => setSecondPersonName(e.target.value)}
+            className="w-full"
+            disabled={!!selectedHistoryItem}
+          />
+        </div>
+
         {!selectedHistoryItem && (
           <Button 
             onClick={handleRunRecommendation}
-            disabled={!askerName.trim() || isLoading}
+            disabled={!askerName.trim() || !secondPersonName.trim() || isLoading}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
           >
             {isLoading ? 'Processing...' : 'Run F2P Recommendation'}
@@ -139,12 +157,15 @@ export const TBHybridMode: React.FC<TBHybridModeProps> = ({ onAddToHistory, sele
             <p className="text-sm text-gray-600">
               <span className="font-medium">Asker:</span> {askerName}
             </p>
+            <p className="text-sm text-gray-600">
+              <span className="font-medium">Second Person:</span> {secondPersonName}
+            </p>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
               <h4 className="text-lg font-medium text-gray-800 mb-3">
-                {askerName} → Other Person
+                {askerName} → {secondPersonName}
               </h4>
               <FavorResults results={leftColumnFavors} setResults={(updatedFavors) => {
                 const newResults = [...updatedFavors, ...rightColumnFavors];
@@ -154,7 +175,7 @@ export const TBHybridMode: React.FC<TBHybridModeProps> = ({ onAddToHistory, sele
             
             <div>
               <h4 className="text-lg font-medium text-gray-800 mb-3">
-                Other Person → {askerName}
+                {secondPersonName} → {askerName}
               </h4>
               <FavorResults results={rightColumnFavors} setResults={(updatedFavors) => {
                 const newResults = [...leftColumnFavors, ...updatedFavors];
