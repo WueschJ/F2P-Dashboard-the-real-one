@@ -37,6 +37,7 @@ export const TB2Mode: React.FC<TB2ModeProps> = ({ onAddToHistory, selectedHistor
     
     setTimeout(() => {
       const newFavors: Favor[] = [
+        // Favors for asker to provide to second person
         {
           id: `tb2-${Date.now()}-1`,
           title: 'Organize a knowledge sharing session between two technical teams on best practices.',
@@ -55,6 +56,28 @@ export const TB2Mode: React.FC<TB2ModeProps> = ({ onAddToHistory, selectedHistor
           id: `tb2-${Date.now()}-3`,
           title: 'Facilitate a collaborative code review session between different development teams.',
           justification: 'Your technical expertise and diplomatic skills make you perfect for fostering productive cross-team code collaboration and learning.',
+          isExpanded: false,
+          isMailHighlighted: false
+        },
+        // Favors for second person to provide to asker
+        {
+          id: `tb2-${Date.now()}-4`,
+          title: 'Provide technical mentorship and advanced development guidance.',
+          justification: 'The second person\'s expertise in advanced technical concepts can significantly accelerate your professional development and project capabilities.',
+          isExpanded: false,
+          isMailHighlighted: false
+        },
+        {
+          id: `tb2-${Date.now()}-5`,
+          title: 'Share insights on technical architecture and system design best practices.',
+          justification: 'Their experience with complex system architectures can provide valuable guidance for your current and future technical challenges.',
+          isExpanded: false,
+          isMailHighlighted: false
+        },
+        {
+          id: `tb2-${Date.now()}-6`,
+          title: 'Offer access to specialized tools and technical resources from their expertise.',
+          justification: 'Their knowledge of specialized development tools and resources can enhance your technical toolkit and improve project efficiency.',
           isExpanded: false,
           isMailHighlighted: false
         }
@@ -76,6 +99,9 @@ export const TB2Mode: React.FC<TB2ModeProps> = ({ onAddToHistory, selectedHistor
       setIsLoading(false);
     }, 1500);
   };
+
+  const leftColumnFavors = results.slice(0, 3);
+  const rightColumnFavors = results.slice(3, 6);
 
   return (
     <div className="space-y-6">
@@ -135,7 +161,28 @@ export const TB2Mode: React.FC<TB2ModeProps> = ({ onAddToHistory, selectedHistor
               <span className="font-medium">Second Person:</span> {secondPerson}
             </p>
           </div>
-          <FavorResults results={results} setResults={setResults} />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+              <h4 className="text-lg font-medium text-gray-800 mb-3">
+                {askerName} → {secondPerson}
+              </h4>
+              <FavorResults results={leftColumnFavors} setResults={(updatedFavors) => {
+                const newResults = [...updatedFavors, ...rightColumnFavors];
+                setResults(newResults);
+              }} />
+            </div>
+            
+            <div>
+              <h4 className="text-lg font-medium text-gray-800 mb-3">
+                {secondPerson} → {askerName}
+              </h4>
+              <FavorResults results={rightColumnFavors} setResults={(updatedFavors) => {
+                const newResults = [...leftColumnFavors, ...updatedFavors];
+                setResults(newResults);
+              }} />
+            </div>
+          </div>
         </div>
       )}
     </div>

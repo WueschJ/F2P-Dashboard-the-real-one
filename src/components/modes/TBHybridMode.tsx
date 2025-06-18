@@ -34,6 +34,7 @@ export const TBHybridMode: React.FC<TBHybridModeProps> = ({ onAddToHistory, sele
     
     setTimeout(() => {
       const newFavors: Favor[] = [
+        // Favors for asker to provide to other person
         {
           id: `tbhybrid-${Date.now()}-1`,
           title: 'Facilitate a hybrid collaboration combining mentorship and partnership opportunities.',
@@ -54,6 +55,28 @@ export const TBHybridMode: React.FC<TBHybridModeProps> = ({ onAddToHistory, sele
           justification: 'Your holistic approach to professional development and business strategy makes you ideal for creating comprehensive growth programs that address multiple needs.',
           isExpanded: false,
           isMailHighlighted: false
+        },
+        // Favors for other person to provide to asker
+        {
+          id: `tbhybrid-${Date.now()}-4`,
+          title: 'Provide specialized industry insights and market analysis for strategic planning.',
+          justification: 'The other person\'s deep industry knowledge and analytical skills can offer valuable market perspectives to inform your strategic decisions.',
+          isExpanded: false,
+          isMailHighlighted: false
+        },
+        {
+          id: `tbhybrid-${Date.now()}-5`,
+          title: 'Share technical expertise and best practices from their domain experience.',
+          justification: 'Their specialized technical background and proven methodologies can significantly enhance your current projects and capabilities.',
+          isExpanded: false,
+          isMailHighlighted: false
+        },
+        {
+          id: `tbhybrid-${Date.now()}-6`,
+          title: 'Offer access to their professional network and strategic partnerships.',
+          justification: 'Their established connections and partnership relationships can open new opportunities and accelerate your business development efforts.',
+          isExpanded: false,
+          isMailHighlighted: false
         }
       ];
       
@@ -72,6 +95,9 @@ export const TBHybridMode: React.FC<TBHybridModeProps> = ({ onAddToHistory, sele
       setIsLoading(false);
     }, 1500);
   };
+
+  const leftColumnFavors = results.slice(0, 3);
+  const rightColumnFavors = results.slice(3, 6);
 
   return (
     <div className="space-y-6">
@@ -114,7 +140,28 @@ export const TBHybridMode: React.FC<TBHybridModeProps> = ({ onAddToHistory, sele
               <span className="font-medium">Asker:</span> {askerName}
             </p>
           </div>
-          <FavorResults results={results} setResults={setResults} />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+              <h4 className="text-lg font-medium text-gray-800 mb-3">
+                {askerName} → Other Person
+              </h4>
+              <FavorResults results={leftColumnFavors} setResults={(updatedFavors) => {
+                const newResults = [...updatedFavors, ...rightColumnFavors];
+                setResults(newResults);
+              }} />
+            </div>
+            
+            <div>
+              <h4 className="text-lg font-medium text-gray-800 mb-3">
+                Other Person → {askerName}
+              </h4>
+              <FavorResults results={rightColumnFavors} setResults={(updatedFavors) => {
+                const newResults = [...leftColumnFavors, ...updatedFavors];
+                setResults(newResults);
+              }} />
+            </div>
+          </div>
         </div>
       )}
     </div>
