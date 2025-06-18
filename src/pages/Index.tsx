@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -87,6 +88,52 @@ const Index = () => {
     setSelectedHistoryItem(null);
   };
 
+  const renderFavorResults = (result: any) => {
+    // Check if this is TB2 or TB_HYBRID mode with 6 favors
+    if ((result.mode === 'TB2' || result.mode === 'TB_HYBRID') && result.favors.length === 6) {
+      const leftColumnFavors = result.favors.slice(0, 3);
+      const rightColumnFavors = result.favors.slice(3, 6);
+      
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <h4 className="text-lg font-medium text-gray-800 mb-3">
+              {result.asker} → {result.secondPerson || 'Other Person'}
+            </h4>
+            <FavorResults 
+              results={leftColumnFavors} 
+              setResults={(updatedFavors) => {
+                const newFavors = [...updatedFavors, ...rightColumnFavors];
+                updateResults(result.id, newFavors);
+              }} 
+            />
+          </div>
+          
+          <div>
+            <h4 className="text-lg font-medium text-gray-800 mb-3">
+              {result.secondPerson || 'Other Person'} → {result.asker}
+            </h4>
+            <FavorResults 
+              results={rightColumnFavors} 
+              setResults={(updatedFavors) => {
+                const newFavors = [...leftColumnFavors, ...updatedFavors];
+                updateResults(result.id, newFavors);
+              }} 
+            />
+          </div>
+        </div>
+      );
+    }
+    
+    // Default single column layout for other modes
+    return (
+      <FavorResults 
+        results={result.favors} 
+        setResults={(updatedFavors) => updateResults(result.id, updatedFavors)} 
+      />
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex w-full">
       <HistorySidebar 
@@ -168,10 +215,7 @@ const Index = () => {
                             </p>
                           )}
                         </div>
-                        <FavorResults 
-                          results={result.favors} 
-                          setResults={(updatedFavors) => updateResults(result.id, updatedFavors)} 
-                        />
+                        {renderFavorResults(result)}
                       </div>
                     ))}
                   </div>
