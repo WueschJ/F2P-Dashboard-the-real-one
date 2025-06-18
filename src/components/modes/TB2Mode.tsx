@@ -18,6 +18,12 @@ export const TB2Mode: React.FC<TB2ModeProps> = ({ onAddToHistory, selectedHistor
   const [results, setResults] = useState<Favor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Random names for display
+  const randomNames = [
+    "Stephan Peters", "Matthew Wild", "Maria Soprano",
+    "Jennifer Davis", "Michael Chen", "Sarah Johnson"
+  ];
+
   useEffect(() => {
     if (selectedHistoryItem && selectedHistoryItem.mode === 'TB2') {
       setAskerName(selectedHistoryItem.asker);
@@ -165,9 +171,9 @@ export const TB2Mode: React.FC<TB2ModeProps> = ({ onAddToHistory, selectedHistor
               <div>
                 <p className="text-xs font-medium text-gray-700 mb-1">{askerName} → {secondPerson}:</p>
                 <div className="space-y-1">
-                  {leftColumnFavors.map((favor, index) => (
-                    <p key={favor.id} className="text-xs text-gray-600">
-                      {index + 1}. {favor.title.substring(0, 60)}...
+                  {randomNames.slice(0, 3).map((name, index) => (
+                    <p key={index} className="text-xs text-gray-600">
+                      {index + 1}. {name}
                     </p>
                   ))}
                 </div>
@@ -176,9 +182,9 @@ export const TB2Mode: React.FC<TB2ModeProps> = ({ onAddToHistory, selectedHistor
               <div>
                 <p className="text-xs font-medium text-gray-700 mb-1">{secondPerson} → {askerName}:</p>
                 <div className="space-y-1">
-                  {rightColumnFavors.map((favor, index) => (
-                    <p key={favor.id} className="text-xs text-gray-600">
-                      {index + 1}. {favor.title.substring(0, 60)}...
+                  {randomNames.slice(3, 6).map((name, index) => (
+                    <p key={index} className="text-xs text-gray-600">
+                      {index + 1}. {name}
                     </p>
                   ))}
                 </div>
